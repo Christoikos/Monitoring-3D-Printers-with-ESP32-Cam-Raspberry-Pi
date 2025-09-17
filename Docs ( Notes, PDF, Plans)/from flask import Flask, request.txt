@@ -1,0 +1,20 @@
+from flask import Flask, request
+import datetime
+
+app = Flask(__name__)
+registry = {}
+
+@app.route("/register")
+def register():
+    mac = request.args.get('mac')
+    ip = request.args.get('ip')
+    if mac and ip:
+        registry[mac] = {'ip': ip, 'time': datetime.datetime.now().isoformat()}
+        with open("esp_registry.txt", "w") as f:
+            for mac, data in registry.items():
+                f.write(f"{mac} -> {data['ip']} @ {data['time']}\n")
+        return "Registered", 200
+    return "Invalid", 400
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

@@ -1,0 +1,110 @@
+Every step & lines to make raspberri Pi Access Point :
+--------------------------------------------------------------------------------------- 
+[1] Update and Install Required Packages
+Sudo apt update && sudo apt upgrade
+sudo apt install hostapd dnsmasq dhcpcd5
+
+Disabled NetworkManager:
+Sudo systemctl stop NetworkManager
+sudo systemctl disable NetworkManager
+
+it might need but i think we didnt use it : 
+sudo systemctl stop wpa_supplicant
+sudo systemctl disable wpa_supplicant
+---------------------------------------------------------------------------------------
+[2] Static IP for wlan0 ( DHCP Server needs this):
+sudo nano /etc/dhcpcd.conf (opens a file/txt/conf )
+
+what is inside : 
+A Big TXT like File with a lot of #Blue_Lines 
+
+we write on the first space : 
+static domain_name_servers=1.1.1.1 8.8.8.8
+
+and at the bottom of it : (this gives the PI a fixed IP for its own wifi inteface)
+interface wlan0
+    static ip_address=192.168.4.1/24	(4 spaces)
+    nohook wpa_supplicant		(4 spaces)
+
+Cntr+O (save) -> Enter -> Cntr+X (exit)
+	
+sudo systemctl restart dhcpcd
+---------------------------------------------------------------------------------------
+[3]Configure hostapd (Access Point Service)
+
+sudo nano /etc/hostapd/hostapd.conf (opens a file/txt/conf)
+
+we write inside :
+interface=wlan0
+driver=nl80211
+ssid=Pi-Camera-Net
+hw_mode=g
+channel=6
+wmm_enabled=0
+auth_algs=1
+wpa=2
+wpa_passphrase=12345678
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+
+Cntr+O (save) -> Enter -> Cntr+X (exit)
+
+Then you need to tell hostapd where to find this config, you open a conf:
+sudo nano /etc/default/hostapd
+
+what is inside : 
+A Big TXT like File with a lot of #Blue_Lines,you find the : #DAEMON_CONF=""
+and you write inside : 
+#DAEMON_CONF="/etc/hostapd/hostapd.conf"
+
+Cntr+O (save) -> Enter -> Cntr+X (exit)
+
+Enable and start hostapd:
+sudo systemctl unmask hostapd
+sudo systemctl enable hostapd
+sudo systemctl start hostapd
+---------------------------------------------------------------------------------------
+[4] Cinfogure dnsmasq (DHCP + DNS Server)
+
+sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig (Backup the default config)
+sudo nano /etc/dnsmasq.conf  (opens a file/txt/conf) (this time it creates a new one )
+write inside :
+interface=wlan0
+#bind-interfaces
+server=1.1.1.1
+server=8.8.8.8
+dhcp-range=192.168.4.2,192.168.4.100,255.255.255.0,24h
+
+Cntr+O (save) -> Enter -> Cntr+X (exit)
+
+sudo systemctl restart dnsmasq
+sudo systemctl enable dnsmasq
+
+
+---------------------------------------------------------------------------------------
+
+Sudo Reboot
+
+---------------------------------------------------------------------------------------
+
+You can run then: ip a show wlan0 
+it suppose to show something like :
+inet 192.168.4.1/24 brb 192.168.4.255 
+
+every time it reboots . you can check 
+sudo systemctl (stop/restart/start/enable) (dhcpcd/hostapd/dnsmasq)
+
+sudo systemctl status (dhcpcd/hostapd/dnsmasq) 
+or
+sudo journalctl -u hostapd -n 50
+sudo journalctl -u hostapd -b
+sudo journalctl -u dnsmasq -b
+
+---------------------------------------------------------------------------------------
+Troubleshooting Notes : 
+
+- hostapd failing? -> Make sure there is no blank or broken line in /etc/hostapd/hostapd.conf
+- dnsmasq failing? -> Usually a bad config line -- (bad option at line 1) means a typo or wrong file format
+- dhcpcd must not confict with NetworkManager
+- If your AP shows up but clients can not connect -> check if DHCP is assigning IPs (dnsmasq working)
+

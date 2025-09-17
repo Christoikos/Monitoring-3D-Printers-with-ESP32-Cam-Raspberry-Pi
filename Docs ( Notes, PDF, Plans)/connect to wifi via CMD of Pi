@@ -1,0 +1,22 @@
+Wifi Connection Via CMD of Pi :
+
+nmcli device wifi list 
+nmcli device wifi connect "ESP32-AP" password "12345678"
+
+go>>wifi>>advance options >> Edit Connection, because sometimes 
+it stucks !!!! NOT IT !!!!
+
+also you can change the ESP32-AP mode to Hotspot from Client. 
+go >> wifi >> advance options >> Edit Connection >> select "ESP32-AP" 
+>> goto gear. > wireless >> Mode >> Hotspot !!!!! NOT IT !!!!!
+
+or 
+right click on prognosis-wifi to disconnect . and connect to esp32-ap
+!!!! YES !!!!
+
+or chatgpt sais: 
+
+nmcli connection modify "ESP-AP" ipv4.never-default yes
+... it tells the pi not to use it for the default internet route(???)
+
+. 

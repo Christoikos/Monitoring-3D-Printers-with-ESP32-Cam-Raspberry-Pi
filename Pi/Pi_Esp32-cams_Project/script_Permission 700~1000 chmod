@@ -1,0 +1,8 @@
+Run every time this line for scripts to have permission:
+
+>> chmod 700 /run/user/1000
+
+
+also if networkmanager crushes . 
+
+>> sudo systemctl restart NetworkManager

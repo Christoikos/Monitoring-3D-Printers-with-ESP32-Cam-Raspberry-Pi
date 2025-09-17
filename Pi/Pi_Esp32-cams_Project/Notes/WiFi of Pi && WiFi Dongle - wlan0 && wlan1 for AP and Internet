@@ -1,0 +1,61 @@
+Wifi of Pi && WiFi Dongle / wlan0 && wlan1 for AP and Internet:
+step by step Guide->
+
+[0] Identify interfaces
+>> ip a 
+- you should see both wlan0 and wlan1
+
+>> iw dev
+-to confirm which is which
+
+>> iwlist wlan1 scan
+-test it 
+
+>> ip a 
+- look for your usb wifi dongle - it should be named something like wlan1
+
+>>lsusb 
+- if its missing, run lsusb
+
+[1] 
+
+>> sudo nano /etc/wpa_supplicant/wpa_supplicant-wlan1.conf
+
+- Paste :
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=GR
+
+network={
+    ssid="PROGNOSIS_GUEST"
+    psk="2410623922"
+}
+----
+Ctrl+O -> Enter -> Ctrl+X
+----
+
+[2]
+Now bring up the interface and connect:
+
+>> sudo wpa_supplicant -B -i wlan1 -c /etc/wpa_supplicant/wpa_supplicant-wlan1.conf
+
+IF you have RFKILL: wlan soft block . or generally rfkill and block you can check ->
+
+>> rfkill list all 
+- to see which is blocked or not.
+>> sudo rfkill unblock all
+>> rfkill list all 
+- recheck
+
+NEXT:
+
+>> sudo ip link set wlan1 up
+- bring up the interface and connect
+
+>> sudo wpa_supplicant -B -i wlan1 -c /etc/wpa_supplicant/wpa_supplicant.conf [ without -wlan1 this time !?!]
+- connect again to wpa_supplicant
+
+>> sudo dhclient wlan1
+- if it sends ERROR: IpV4 Address already assigned its because it has already an IP
+
+

@@ -1,0 +1,36 @@
+Wifi IP Change Manually for ESP32-AP from Pi. 
+
+Because the IP changes when it connects for Pi . we need it to have
+the same or something like it to connect and show the cameras .
+when connected it had 10.42.22.X type of IP. 
+
+we use those commands : 
+
+nmcli con mod "ESP32-AP" ipv4.address 192.168.4.100/24 
+nmcli con mod "ESP32-AP" ipv4.gateway 192.168.4.1
+nmcli con mod "ESP32-AP" ipv4.method manual
+nmcli con up "ESP32-AP" 
+
+those 4 lines .
+
+nmcli : Network Manager CLI -> manually assign a statip IP 
+
+line 1 : 
+sets a static IP address for the Pi's wifi interface
+when connected to "ESP32-AP".
+192.168.4.100 is your Pi's address.
+/24 means the subnet mask is 255.255.255.0
+
+line 2 :
+Sets the default gateway for the connection -- in this case , 
+the ESP32-AP (usually at .1)
+[even if there is no internet , setting this helps routing within 
+the network ]
+
+line 3 : 
+Tells NetworkManager not to use DHCP,but to use the manual/static IP
+we defined above.
+
+line 4 : 
+Bring up the connection to the access point immediately,applying
+the manual IP/gateway settings.
