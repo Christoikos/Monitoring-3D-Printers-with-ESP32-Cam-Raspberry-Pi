@@ -85,5 +85,5 @@ I’m using this project to learn about:
 ---
 
 ## 🔹 Credits
-Made by **[Your Name]**, as part of my self-learning journey.  
+Made by Stoikos Christos, as part of my self-learning journey.  
 Feel free to use, learn from, or suggest improvements!  
