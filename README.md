@@ -26,7 +26,8 @@ Each ESP32-AP also has a small **OLED display** attached, which shows in real-ti
   - Connects to the internet with wlan0 (or Ethernet).  
   - Connects to ESP32-APs using wlan1 (USB Wi-Fi dongle).  
   - Runs Python scripts to collect IP/MAC info and organize devices.  
-  - Provides a GUI that shows devices grouped by AP.  
+  - Provides a GUI that shows devices grouped by AP.
+  - Displays the cameras through the browser.
 
 - The **OLED displays on ESP32-APs** show live status of which clients are connected.  
 
