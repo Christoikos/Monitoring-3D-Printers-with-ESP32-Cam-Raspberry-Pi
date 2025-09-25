@@ -10,8 +10,8 @@ Each ESP32-AP also has a small **OLED display** attached, which shows in real-ti
 ---
 # Restrictions
  - Wi-Fi could not support so many connections
- - No New Router
- - No Ethernet Cable 
+ - No New Router , for using it as AP
+ - No Ethernet Cable , for Pi
  - We needed to check them through phone anytime from anywhere
 ---
 
