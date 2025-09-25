@@ -8,6 +8,12 @@ From there, the Pi runs scripts to collect data and monitor the ESP32 devices.
 Each ESP32-AP also has a small **OLED display** attached, which shows in real-time which clients are connected.
 
 ---
+# Restrictions
+ - Wi-Fi could not support so many connections
+ - No New Router
+ - No Ethernet Cable 
+ - We needed to check them through phone anytime from anywhere
+---
 
 ## 🔹 How it works
 
